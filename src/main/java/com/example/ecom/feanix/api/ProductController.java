@@ -23,4 +23,10 @@ public class ProductController {
     public ResponseProductDto findById(@PathVariable String productId) {
         return productService.findProductById(productId);
     }
+
+    @PutMapping("/{productId}")
+    public String update(@RequestBody RequestProductDto dto, @PathVariable String productId){
+        productService.update(dto, productId);
+        return "Updated";
+    }
 }

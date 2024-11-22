@@ -1,11 +1,13 @@
 package com.example.ecom.feanix.service.impl;
 
+import com.example.ecom.feanix.dto.paginate.ResponseProductPaginateDto;
 import com.example.ecom.feanix.dto.requet.RequestProductDto;
 import com.example.ecom.feanix.dto.response.ResponseProductDto;
 import com.example.ecom.feanix.entity.Product;
 import com.example.ecom.feanix.reository.ProductRepository;
 import com.example.ecom.feanix.service.ProductService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -66,6 +68,20 @@ public class ProductServiceImpl implements ProductService {
     public void delete(String productId) {
         repository.deleteById(productId);
     }
+
+    @Override
+    public ResponseProductPaginateDto search(String searchText, int page, int size) {
+
+
+                return ResponseProductPaginateDto.builder()
+                        .count(
+                                repository.searchCount(searchText)
+                        )
+                        .dataList(
+                                repository.searchAll(searchText, PageRequest.of(page,size)).
+                                        stream().map(this::toResponseProductDto).toList()
+                        ).build();
+  }
 
     public Product toProduct(RequestProductDto dto) {
         if(dto==null)return null;

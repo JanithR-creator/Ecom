@@ -1,6 +1,7 @@
 package com.example.ecom.feanix.api;
 
 
+import com.example.ecom.feanix.dto.paginate.ResponseProductPaginateDto;
 import com.example.ecom.feanix.dto.requet.RequestProductDto;
 import com.example.ecom.feanix.dto.response.ResponseProductDto;
 import com.example.ecom.feanix.service.ProductService;
@@ -25,14 +26,23 @@ public class ProductController {
     }
 
     @PutMapping("/{productId}")
-    public String update(@RequestBody RequestProductDto dto, @PathVariable String productId){
+    public String update(@RequestBody RequestProductDto dto, @PathVariable String productId) {
         productService.update(dto, productId);
         return "Updated";
     }
 
     @DeleteMapping("/{productId}")
-    public String delete(@PathVariable String productId){
+    public String delete(@PathVariable String productId) {
         productService.delete(productId);
         return "Deleted";
+    }
+
+    @GetMapping("/search")
+    public ResponseProductPaginateDto search(
+            @RequestParam String searchText,
+            @RequestParam int page,
+            @RequestParam int size
+    ) {
+        return productService.search(searchText, page, size);
     }
 }

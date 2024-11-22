@@ -29,4 +29,10 @@ public class ProductController {
         productService.update(dto, productId);
         return "Updated";
     }
+
+    @DeleteMapping("/{productId}")
+    public String delete(@PathVariable String productId){
+        productService.delete(productId);
+        return "Deleted";
+    }
 }

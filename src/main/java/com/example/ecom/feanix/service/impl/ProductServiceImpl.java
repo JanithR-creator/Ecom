@@ -62,6 +62,11 @@ public class ProductServiceImpl implements ProductService {
         repository.save(product);
     }
 
+    @Override
+    public void delete(String productId) {
+        repository.deleteById(productId);
+    }
+
     public Product toProduct(RequestProductDto dto) {
         if(dto==null)return null;
 

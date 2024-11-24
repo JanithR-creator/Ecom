@@ -1,11 +1,12 @@
 package com.example.ecom.feanix.api;
 
 
-import com.example.ecom.feanix.dto.paginate.ResponseProductPaginateDto;
 import com.example.ecom.feanix.dto.requet.RequestProductDto;
-import com.example.ecom.feanix.dto.response.ResponseProductDto;
 import com.example.ecom.feanix.service.ProductService;
+import com.example.ecom.feanix.util.StandardResponseDto;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -15,34 +16,50 @@ public class ProductController {
     private final ProductService productService;
 
     @PostMapping
-    public String save(@RequestBody RequestProductDto dto) {
+    public ResponseEntity<StandardResponseDto> save(@RequestBody RequestProductDto dto) {
         productService.create(dto);
-        return "Saved";
+        return new ResponseEntity<>(
+                new StandardResponseDto("Product has been saved...", 201, null),
+                HttpStatus.CREATED
+        );
     }
 
     @GetMapping("/{productId}")
-    public ResponseProductDto findById(@PathVariable String productId) {
-        return productService.findProductById(productId);
+    public ResponseEntity<StandardResponseDto> findById(@PathVariable String productId) {
+
+        return new ResponseEntity<>(
+                new StandardResponseDto("Selected product", 200, productService.findProductById(productId)),
+                HttpStatus.OK
+        );
     }
 
     @PutMapping("/{productId}")
-    public String update(@RequestBody RequestProductDto dto, @PathVariable String productId) {
+    public ResponseEntity<StandardResponseDto> update(@RequestBody RequestProductDto dto, @PathVariable String productId) {
         productService.update(dto, productId);
-        return "Updated";
+        return new ResponseEntity<>(
+                new StandardResponseDto("Product has been modified..", 201, null),
+                HttpStatus.CREATED
+        );
     }
 
     @DeleteMapping("/{productId}")
-    public String delete(@PathVariable String productId) {
+    public ResponseEntity<StandardResponseDto> delete(@PathVariable String productId) {
         productService.delete(productId);
-        return "Deleted";
+        return new ResponseEntity<>(
+                new StandardResponseDto("Product has been deleted..", 204, null),
+                HttpStatus.OK
+        );
     }
 
     @GetMapping("/search")
-    public ResponseProductPaginateDto search(
+    public ResponseEntity<StandardResponseDto> search(
             @RequestParam String searchText,
             @RequestParam int page,
             @RequestParam int size
     ) {
-        return productService.search(searchText, page, size);
+        return new ResponseEntity<>(
+                new StandardResponseDto("Product List", 200, productService.search(searchText, page, size)),
+                HttpStatus.OK
+        );
     }
 }

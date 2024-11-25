@@ -4,6 +4,7 @@ import com.example.ecom.feanix.dto.paginate.ResponseProductPaginateDto;
 import com.example.ecom.feanix.dto.requet.RequestProductDto;
 import com.example.ecom.feanix.dto.response.ResponseProductDto;
 import com.example.ecom.feanix.entity.Product;
+import com.example.ecom.feanix.exception.EntryNotFoundException;
 import com.example.ecom.feanix.reository.ProductRepository;
 import com.example.ecom.feanix.service.ProductService;
 import lombok.RequiredArgsConstructor;
@@ -43,7 +44,7 @@ public class ProductServiceImpl implements ProductService {
         Optional<Product> selectedProduct = repository.findById(productId);
 
         if(selectedProduct.isEmpty()){
-            throw new RuntimeException("Product not found");
+            throw new EntryNotFoundException("Product not found");
         }
         return toResponseProductDto(selectedProduct.get());
     }

@@ -20,7 +20,7 @@ public class UserRole {
     @Id
     @Column(name = "role_id")
     private String roleId;
-    @Column(name = "role_name")
+    @Column(name = "role_name", unique = true)
     private String roleName;
 
     @ManyToMany(mappedBy = "roles")

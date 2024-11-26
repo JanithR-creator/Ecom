@@ -1,15 +1,20 @@
 package com.example.ecom.feanix.service.impl;
 
+import com.example.ecom.feanix.dto.requet.RequestUserDto;
 import com.example.ecom.feanix.entity.ApplicationUser;
 import com.example.ecom.feanix.entity.UserRole;
+import com.example.ecom.feanix.exception.DuplicateEntryException;
 import com.example.ecom.feanix.exception.EntryNotFoundException;
-import com.example.ecom.feanix.reository.ApplicationUserRepository;
+import com.example.ecom.feanix.repository.ApplicationUserRepository;
+import com.example.ecom.feanix.repository.ApplicationUserRoleRepository;
 import com.example.ecom.feanix.security.SupportSpringApplicationUser;
 import com.example.ecom.feanix.service.ApplicationUserService;
+import com.example.ecom.feanix.util.IdGenerator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -24,6 +29,9 @@ import static com.example.ecom.feanix.security.ApplicationUserRole.USER;
 @RequiredArgsConstructor
 public class ApplicationUserServiceImpl implements ApplicationUserService {
     private final ApplicationUserRepository userRepository;
+    private final IdGenerator idGenerator;
+    private final ApplicationUserRoleRepository userRoleRepository;
+    private final PasswordEncoder passwordEncoder;
 
     @Transactional
     @Override
@@ -52,5 +60,41 @@ public class ApplicationUserServiceImpl implements ApplicationUserService {
                 selectedUserData.get().isEnabled(),
                 grantedAuthorities
         );
+    }
+
+    @Override
+    public void create(RequestUserDto dto) {
+        Optional<ApplicationUser> selectedUser = userRepository.findByUserName(dto.getUserName());
+        if (selectedUser.isPresent()) {
+            throw new DuplicateEntryException(String.format("User %s is exists", dto.getUserName()));
+        }
+        userRepository.save(createApplicationUser(dto));
+    }
+
+    public ApplicationUser createApplicationUser(RequestUserDto dto) {
+        if (dto == null) {
+            throw new RuntimeException("Something went wrong...");
+        }
+
+        Optional<UserRole> selectedUserRole = userRoleRepository.findByRoleName("USER");
+
+        if (selectedUserRole.isEmpty()) {
+            throw new EntryNotFoundException("Role not found");
+        }
+
+        Set<UserRole> userRoles = new HashSet<>();
+        userRoles.add(selectedUserRole.get());
+
+        return ApplicationUser.builder()
+                .userId(idGenerator.generate())
+                .userName(dto.getUserName())
+                .password(passwordEncoder.encode(dto.getPassword()))
+                .address(dto.getAddress())
+                .roles(userRoles)
+                .isAccountNonExpired(true)
+                .isAccountNonLocked(true)
+                .isCredentialsNonExpired(true)
+                .isEnabled(true)
+                .build();
     }
 }

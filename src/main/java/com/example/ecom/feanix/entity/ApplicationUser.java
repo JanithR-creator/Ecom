@@ -1,10 +1,7 @@
 package com.example.ecom.feanix.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -14,12 +11,13 @@ import java.util.Set;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 public class ApplicationUser {
     @Id
     @Column(name = "user_id", length = 100)
     private String userId;
 
-    @Column(name = "username", length = 100, unique = true)
+    @Column(name = "user_name", length = 100, unique = true)
     private String userName;
 
     @Column(name = "password", length = 750, nullable = false)
@@ -27,12 +25,16 @@ public class ApplicationUser {
 
     @Column(name = "address", length = 750, nullable = false)
     private String address;
+
     @Column(name = "is_account_non_expired", columnDefinition = "TINYINT")
     private boolean isAccountNonExpired;
+
     @Column(name = "is_account_non_locked", columnDefinition = "TINYINT")
     private boolean isAccountNonLocked;
+
     @Column(name = "is_credentials_non_expired", columnDefinition = "TINYINT")
     private boolean isCredentialsNonExpired;
+
     @Column(name = "is_enabled", columnDefinition = "TINYINT")
     private boolean isEnabled;
 
@@ -41,6 +43,7 @@ public class ApplicationUser {
 
     @ManyToMany
     @JoinTable(
+            name = "application_user_roles",
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id")
     )

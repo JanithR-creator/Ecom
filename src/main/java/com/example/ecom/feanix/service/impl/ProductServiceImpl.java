@@ -5,7 +5,7 @@ import com.example.ecom.feanix.dto.requet.RequestProductDto;
 import com.example.ecom.feanix.dto.response.ResponseProductDto;
 import com.example.ecom.feanix.entity.Product;
 import com.example.ecom.feanix.exception.EntryNotFoundException;
-import com.example.ecom.feanix.reository.ProductRepository;
+import com.example.ecom.feanix.repository.ProductRepository;
 import com.example.ecom.feanix.service.ProductService;
 import com.example.ecom.feanix.util.IdGenerator;
 import lombok.RequiredArgsConstructor;
@@ -14,7 +14,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
-import java.util.UUID;
 
 
 @Service

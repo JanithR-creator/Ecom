@@ -1,4 +1,4 @@
-package com.example.ecom.feanix.reository;
+package com.example.ecom.feanix.repository;
 
 
 import com.example.ecom.feanix.entity.Product;

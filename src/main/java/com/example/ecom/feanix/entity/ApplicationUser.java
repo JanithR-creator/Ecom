@@ -27,7 +27,22 @@ public class ApplicationUser {
 
     @Column(name = "address", length = 750, nullable = false)
     private String address;
+    @Column(name = "is_account_non_expired", columnDefinition = "TINYINT")
+    private boolean isAccountNonExpired;
+    @Column(name = "is_account_non_locked", columnDefinition = "TINYINT")
+    private boolean isAccountNonLocked;
+    @Column(name = "is_credentials_non_expired", columnDefinition = "TINYINT")
+    private boolean isCredentialsNonExpired;
+    @Column(name = "is_enabled", columnDefinition = "TINYINT")
+    private boolean isEnabled;
 
     @OneToMany(mappedBy = "user", fetch = FetchType.EAGER)
     private Set<CustomerOrder> customerOrders = new HashSet<>();
+
+    @ManyToMany
+    @JoinTable(
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id")
+    )
+    private Set<UserRole> roles;
 }

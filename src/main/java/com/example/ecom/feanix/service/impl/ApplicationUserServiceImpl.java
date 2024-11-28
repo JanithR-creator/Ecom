@@ -7,7 +7,7 @@ import com.example.ecom.feanix.exception.DuplicateEntryException;
 import com.example.ecom.feanix.exception.EntryNotFoundException;
 import com.example.ecom.feanix.repository.ApplicationUserRepository;
 import com.example.ecom.feanix.repository.ApplicationUserRoleRepository;
-import com.example.ecom.feanix.security.SupportSpringApplicationUser;
+import com.example.ecom.feanix.security.SupportAuthenticationApplicationUser;
 import com.example.ecom.feanix.service.ApplicationUserService;
 import com.example.ecom.feanix.util.IdGenerator;
 import lombok.RequiredArgsConstructor;
@@ -51,7 +51,7 @@ public class ApplicationUserServiceImpl implements ApplicationUserService {
                 grantedAuthorities.addAll(USER.grantedAuthorities());
             }
         }
-        return new SupportSpringApplicationUser(
+        return new SupportAuthenticationApplicationUser(
                 selectedUserData.get().getUserName(),
                 selectedUserData.get().getPassword(),
                 selectedUserData.get().isAccountNonExpired(),

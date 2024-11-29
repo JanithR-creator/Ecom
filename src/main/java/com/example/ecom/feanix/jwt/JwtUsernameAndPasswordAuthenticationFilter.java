@@ -27,7 +27,7 @@ public class JwtUsernameAndPasswordAuthenticationFilter extends UsernamePassword
     public JwtUsernameAndPasswordAuthenticationFilter(
             AuthenticationManager authenticationManager,
             JwtConfig jwtConfig, SecretKey secretKey) {
-        this.authenticationManager = authenticationManager;
+        this.authenticationManager = authenticationManager; //provide by spring security
         this.jwtConfig = jwtConfig;
         this.secretKey = secretKey;
     }

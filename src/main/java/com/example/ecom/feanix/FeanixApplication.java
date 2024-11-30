@@ -1,5 +1,6 @@
 package com.example.ecom.feanix;
 
+import com.example.ecom.feanix.service.ApplicationUserService;
 import com.example.ecom.feanix.service.UserRoleService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.CommandLineRunner;
@@ -10,6 +11,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @RequiredArgsConstructor
 public class FeanixApplication implements CommandLineRunner {
 	private final UserRoleService userRoleService;
+	private final ApplicationUserService applicationUserService;
 
 	public static void main(String[] args) {
 		SpringApplication.run(FeanixApplication.class, args);
@@ -18,5 +20,6 @@ public class FeanixApplication implements CommandLineRunner {
 	@Override
 	public void run(String... args) throws Exception {
 		userRoleService.initializeRoles();
+		applicationUserService.initializeAdmin();
 	}
 }
